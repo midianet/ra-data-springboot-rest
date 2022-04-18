@@ -12,8 +12,9 @@
     "watch": "rimraf ./lib && tsc --watch"
   },
   "dependencies": {
-    "query-string": "~5.1.1",
     "react-admin": "^2.5.2"
+    "query-string": "^7.1.1",
+    "ra-core": "^4.0.0"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
