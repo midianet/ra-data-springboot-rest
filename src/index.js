@@ -1,4 +1,5 @@
 import { stringify } from "query-string";
+import { fetchUtils, DataProvider } from 'ra-core';
 import {
   fetchUtils,
   GET_LIST,
@@ -16,7 +17,7 @@ import {
  * Maps react-admin queries to a REST API implemented using Java Spring Boot and Swagger
  *
  * @example
- * GET_LIST     => GET http://my.api.url/posts?page=0&pageSize=10
+ * GET_LIST     => GET http://my.api.url/posts?page=0&size=10&sortField=name&sortOrder=ASC
  * GET_ONE      => GET http://my.api.url/posts/123
  * GET_MANY     => GET http://my.api.url/posts?id=1234&id=5678
  * UPDATE       => PUT http://my.api.url/posts/123
@@ -36,7 +37,16 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
     switch (type) {
       case GET_LIST: {
         const { page, perPage } = params.pagination;
-        url = `${apiUrl}/${resource}?page=${page}&pageSize=${perPage}`;
+        const { field, order } = params.sort;
+        const query = {
+            ...fetchUtils.flattenObject(params.filter),
+            sortField: field,
+            sortOrder: order,
+            page: page,
+            size: perPage
+        };
+        const url = `${apiUrl}/${resource}?${stringify(query)}`;
+        /*url = `${apiUrl}/${resource}?page=${page}&pageSize=${perPage}`;*/
         break;
       }
       case GET_ONE:
