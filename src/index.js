@@ -36,7 +36,18 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
     switch (type) {
       case GET_LIST: {
         const { page, perPage } = params.pagination;
-        url = `${apiUrl}/${resource}?page=${page}&pageSize=${perPage}`;
+        const { field, order } = params.sort;
+        const query = {
+            ...fetchUtils.flattenObject(params.filter),
+            sortField: field,
+            sortOrder: order,
+            page: page,
+            size: perPage,
+        };
+        const url = `${apiUrl}/${resource}?${stringify(query)}`;
+        console.log(url);
+        //const { page, perPage } = params.pagination;
+        //url = `${apiUrl}/${resource}?page=${page}&pageSize=${perPage}`;
         break;
       }
       case GET_ONE:
